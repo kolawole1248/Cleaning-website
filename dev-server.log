@@ -302,3 +302,7 @@ Error: getaddrinfo EAI_AGAIN cdn.phototourl.com
 }
  GET /_next/image?url=https%3A%2F%2Fcdn.phototourl.com%2Fmember%2F2026-10-08-a7e317af-22b7-4979-8560-1367df8d6246.jpg&w=1080&q=75 500 in 2.7s (next.js: 2.5s, application-code: 218ms)
  GET /_next/image?url=https%3A%2F%2Fcdn.phototourl.com%2Fmember%2F2026-10-08-a7e317af-22b7-4979-8560-1367df8d6246.jpg&w=1080&q=75 500 in 2.7s (next.js: 2.5s, application-code: 218ms)
+ POST /admin/services 200 in 467ms (next.js: 1.1ms, application-code: 466ms)
+  └─ ƒ setServiceStatus({}) in 29ms app/admin/(panel)/actions.ts
+ GET /services 200 in 1343ms (next.js: 4ms, application-code: 1339ms)
+ GET / 200 in 1209ms (next.js: 7ms, application-code: 1202ms)
