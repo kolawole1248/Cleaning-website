@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// A cleaning service shown on the website (editable in the admin panel)
+model Service {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  summary     String
+  description String
+  // Newline-separated "what's included" list
+  includes    String   @default("")
+  // Price shown on the site, e.g. "From £25 per cleaner-hour" or "Get a quote"
+  priceLabel  String
+  // Small note under the price, e.g. "Minimum 2 hours"
+  priceNote   String   @default("")
+  // published | coming-soon | hidden
+  status      String   @default("published")
+  // Optional image URL
+  image       String   @default("")
+  // Highlight on home page
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  updatedAt   DateTime @updatedAt
+}
+
+// Key/value site settings (phone, prices disclaimer, payment details...)
+model Setting {
+  key   String @id
+  value String
+}
+
+// Customer enquiries submitted through the quote form
+model Enquiry {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  name         String
+  phone        String
+  email        String
+  postcode     String
+  service      String
+  propertyType String
+  bedrooms     String
+  bathrooms    String
+  frequency    String
+  preferredDate String  @default("")
+  extras       String   @default("")
+  description  String
+  // JSON array of uploaded photo paths under /uploads
+  photos       String   @default("[]")
+  // new | reviewing | quoted | booked | closed
+  status       String   @default("new")
+  notes        String   @default("")
+
+  // Quote sent to the customer (admin panel → Send quote)
+  quotePrice   String   @default("")
+  quoteMessage String   @default("")
+  quoteSentAt  DateTime?
+  // Stripe Checkout session for this quote (empty if none)
+  stripeSessionId String @default("")
+  paidAt       DateTime?
+}
+
+// Admin panel login accounts
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("")
+  createdAt    DateTime @default(now())
+}
