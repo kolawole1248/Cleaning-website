@@ -178,7 +178,11 @@ computer. Add:
 |---|---|
 | `SITE_URL` | your real domain, e.g. `https://zacleans.co.uk` |
 | `SESSION_SECRET` | a new long random string (not the dev one) |
-| `DATABASE_URL` | see the database note below |
+| `TURSO_DATABASE_URL` | from `turso db show za-cleaning` (looks like `libsql://…`) |
+| `TURSO_AUTH_TOKEN` | from `turso db tokens create za-cleaning` |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary dashboard → Product Environment Credentials |
+| `CLOUDINARY_API_KEY` | same page |
+| `CLOUDINARY_API_SECRET` | same page |
 | `SMTP_HOST` | `smtp.gmail.com` |
 | `SMTP_PORT` | `587` |
 | `SMTP_USER` | `zacleans26@gmail.com` |
@@ -189,10 +193,14 @@ computer. Add:
 
 Redeploy after changing environment variables.
 
-**⚠ Database warning — read before deploying:** the site currently uses a
-SQLite file (`prisma/dev.db`) stored on **your computer**. Vercel's servers
-are read-only and reset on every deploy, so enquiry/service data and photo
-uploads will **not** persist there. Before going live on Vercel we must move
-the database to a hosted service (e.g. Turso or Neon — both have free
-tiers). Until then, run the site locally (`npm run dev`) — everything works
-here. Ask to have the database hosted when you are ready to deploy.
+**How the database works:** locally the site uses the SQLite file
+(`prisma/dev.db`) — no setup needed. On Vercel, setting the two `TURSO_*`
+variables switches it to your hosted Turso database automatically (the code
+in `lib/db.ts` picks whichever is available). Photos behave the same way:
+local `public/uploads` at home, Cloudinary on Vercel.
+
+**First migration to Turso** (run once — asks you for nothing):
+
+1. Put `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in `.env`
+2. Run `npm run db:migrate:turso` — creates the tables on Turso and copies
+   every service, setting, enquiry and the admin login across. Safe to re-run.
