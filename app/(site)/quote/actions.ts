@@ -1,9 +1,8 @@
 "use server";
 
-import { promises as fs } from "fs";
-import path from "path";
 import { prisma } from "@/lib/db";
 import { sendEnquiryEmail } from "@/lib/email";
+import { storePhoto } from "@/lib/photos";
 
 export type EnquiryFormState = {
   ok: boolean;
@@ -86,16 +85,12 @@ export async function submitEnquiry(
       };
     }
 
-    const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const dir = path.join(process.cwd(), "public", "uploads");
     try {
-      await fs.mkdir(dir, { recursive: true });
-      const buffer = Buffer.from(await file.arrayBuffer());
-      await fs.writeFile(path.join(dir, safeName), buffer);
-      photoPaths.push(`/uploads/${safeName}`);
+      // Cloudinary when configured (hosted), public/uploads when local
+      photoPaths.push(await storePhoto(file));
     } catch (error) {
-      // Never lose the enquiry over a photo — e.g. read-only filesystem
-      // when hosted serverless. The enquiry is saved without that photo.
+      // Never lose the enquiry over a photo — the enquiry is saved
+      // without that photo and the failure is logged.
       console.error("[enquiry] photo save failed:", error);
     }
   }

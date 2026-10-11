@@ -44,3 +44,10 @@ npm-install.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev server log (random port each start)
+dev-server.log
+
+# local database + tooling (never commit)
+prisma/dev.db*
+.freebuff/

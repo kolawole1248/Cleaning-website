@@ -10,9 +10,12 @@
     "setup": "prisma db push && node prisma/seed.mjs",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.mjs",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:migrate:turso": "node --env-file=.env scripts/migrate-to-turso.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "@prisma/adapter-libsql": "^6.19.3",
     "@prisma/client": "6.19.3",
     "bcryptjs": "^3.0.2",
     "jose": "^6.0.0",
