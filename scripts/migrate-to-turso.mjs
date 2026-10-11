@@ -28,18 +28,23 @@ const statements = schema
 const turso = createClient({ url, authToken });
 
 const { rows: existing } = await turso.execute(
-  "SELECT name FROM sqlite_master WHERE type='table'"
+  "SELECT name, type FROM sqlite_master WHERE type IN ('table','index')"
 );
-const existingTables = new Set(existing.map((r) => r.name));
+const existingNames = new Set(existing.map((r) => `${r.type}:${r.name}`));
 
 for (const stmt of statements) {
-  const table = stmt.match(/CREATE TABLE ["`]?(\w+)["`]?/)?.[1];
-  if (table && existingTables.has(table)) {
+  const table = stmt.match(/CREATE TABLE ["`\s]*(\w+)["`\s]*\(/)?.[1];
+  const index = stmt.match(/CREATE (?:UNIQUE )?INDEX ["`\s]*(\w+)/)?.[1];
+  if (table && existingNames.has(`table:${table}`)) {
     console.log(`table ${table} already exists — left untouched`);
     continue;
   }
+  if (index && existingNames.has(`index:${index}`)) {
+    console.log(`index ${index} already exists — left untouched`);
+    continue;
+  }
   await turso.execute(stmt);
-  console.log(`table ${table ?? "(statement)"} created`);
+  console.log(`${index ? "index " + index : "table " + (table ?? "(statement)")} created`);
 }
 
 // 2. Copy every row from the local database --------------------------------
