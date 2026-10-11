@@ -51,3 +51,4 @@ dev-server.log
 # local database + tooling (never commit)
 prisma/dev.db*
 .freebuff/
+vercel.env
