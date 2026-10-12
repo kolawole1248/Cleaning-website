@@ -47,6 +47,10 @@ export default function QuoteForm({
           confirm availability and send your final quote before anything is
           booked in.
         </p>
+        <p className="mx-auto mt-3 max-w-md rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+          Your quote will arrive by email — if it is not in your inbox, please
+          check your <strong>Spam</strong> or <strong>Junk</strong> folder.
+        </p>
         <button
           type="button"
           onClick={() => {
