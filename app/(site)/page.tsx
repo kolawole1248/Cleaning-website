@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { getSettings, whatsappLink } from "@/lib/data";
+import { getSettings } from "@/lib/data";
+import HeroContact from "@/components/HeroContact";
 import ServiceCard from "@/components/ServiceCard";
 
 export const dynamic = "force-dynamic";
@@ -44,27 +45,15 @@ export default async function HomePage() {
             contracts for offices — all across London.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap items-start gap-3">
             <Link href="/quote" className="btn-mint">
               Get a free quote
             </Link>
-            <a
-              href={`tel:${settings.phoneDial}`}
-              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/80 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-navy"
-            >
-              Call {settings.phone}
-            </a>
-            <a
-              href={whatsappLink(
-                settings,
-                "Hello ZA Cleaning, I would like a quote please."
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-mint px-6 py-3 text-sm font-semibold text-mint transition-colors hover:bg-mint hover:text-navy-dark"
-            >
-              WhatsApp us
-            </a>
+            <HeroContact
+              phone={settings.phone}
+              phoneDial={settings.phoneDial}
+              email={settings.email}
+            />
           </div>
 
           <p className="mt-6 text-sm font-semibold text-mint">
@@ -215,12 +204,12 @@ export default async function HomePage() {
             >
               Get a quote
             </Link>
-            <a
-              href={`tel:${settings.phoneDial}`}
+            <Link
+              href="/contact"
               className="rounded-full border-2 border-navy px-7 py-3 text-sm font-bold text-navy transition-colors hover:bg-navy hover:text-white"
             >
-              Call {settings.phone}
-            </a>
+              Contact us
+            </Link>
           </div>
         </div>
       </section>
