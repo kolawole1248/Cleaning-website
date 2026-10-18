@@ -51,12 +51,12 @@ export default function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="/contact"
+          <a
+            href="#contact"
             className="rounded-full border-2 border-navy px-4 py-2 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
           >
             Contact us
-          </Link>
+          </a>
           <Link
             href="/quote"
             className="rounded-full bg-mint px-5 py-2.5 text-sm font-bold text-navy-dark transition-colors hover:bg-mint-dark"
@@ -101,13 +101,13 @@ export default function SiteHeader() {
             ))}
           </ul>
           <div className="mt-3 flex gap-3">
-            <Link
-              href="/contact"
+            <a
+              href="#contact"
               onClick={() => setOpen(false)}
               className="flex-1 rounded-full border-2 border-navy px-4 py-2.5 text-center text-sm font-semibold text-navy"
             >
               Contact us
-            </Link>
+            </a>
             <Link
               href="/quote"
               onClick={() => setOpen(false)}

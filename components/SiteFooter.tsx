@@ -6,7 +6,7 @@ export default function SiteFooter({ settings }: { settings: Settings }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-navy text-white">
+    <footer id="contact" className="bg-navy text-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-4">
         <div className="md:col-span-1">
           <p className="text-xl font-extrabold tracking-wide">ZA CLEANING CO.</p>

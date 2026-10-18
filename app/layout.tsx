@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
