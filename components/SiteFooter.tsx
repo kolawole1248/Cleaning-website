@@ -41,6 +41,11 @@ export default function SiteFooter({ settings }: { settings: Settings }) {
           <p className="mb-3 font-bold text-mint">Contact</p>
           <ul className="space-y-2 text-sm text-white/85">
             <li>
+              <Link className="hover:text-mint" href="/contact">
+                Contact us — all details
+              </Link>
+            </li>
+            <li>
               <a className="hover:text-mint" href={`tel:${settings.phoneDial}`}>
                 {settings.phone}
               </a>{" "}

@@ -12,7 +12,7 @@ export default async function SiteLayout({
 
   return (
     <>
-      <SiteHeader phone={settings.phone} phoneDial={settings.phoneDial} />
+      <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter settings={settings} />
       <WhatsAppFab settings={settings} />
