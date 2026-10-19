@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Cleaning services in London",
   description:
     "Regular domestic cleaning, one-off cleaning, deep cleaning, end-of-tenancy cleaning and office cleaning contracts across London. See exactly what is included.",
+  alternates: { canonical: "/services" },
 };
 
 export default async function ServicesPage() {

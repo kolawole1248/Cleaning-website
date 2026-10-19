@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Cleaning prices in London",
   description:
     "Starting prices for regular domestic cleaning from £25 per cleaner-hour, one-off cleaning from £30 per cleaner-hour, deep cleaning, end-of-tenancy and office contracts. Final quotes confirmed before work starts.",
+  alternates: { canonical: "/prices" },
 };
 
 export default async function PricesPage() {

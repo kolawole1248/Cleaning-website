@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Get a quote — house & office cleaning in London",
   description:
     "Request a free quote for domestic, deep, end-of-tenancy or office cleaning in London. Call 07377 372889, WhatsApp us, or send the enquiry form — we respond within one working day.",
+  alternates: { canonical: "/quote" },
 };
 
 export default async function QuotePage({

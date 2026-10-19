@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // Absolute URLs (canonical links, og:image, sitemap) always resolve to
+  // the real domain, never to the per-deployment Vercel URL.
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "ZA Cleaning Co | House & Office Cleaning in London",
     template: "%s | ZA Cleaning Co",
@@ -33,6 +37,12 @@ export const metadata: Metadata = {
       "Professional domestic and office cleaning across London. Clear quotes before any work starts.",
     type: "website",
     locale: "en_GB",
+    siteName: "ZA Cleaning Co",
+    images: [{ url: "/za-logo.jpg", width: 1179, height: 1179, alt: "ZA Cleaning Co" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/za-logo.jpg"],
   },
 };
 
@@ -40,6 +50,8 @@ const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "CleaningService",
   name: "ZA Cleaning Co Ltd",
+  url: SITE_URL,
+  image: `${SITE_URL}/za-logo.jpg`,
   telephone: "+447377372889",
   email: "zacleans26@gmail.com",
   address: {

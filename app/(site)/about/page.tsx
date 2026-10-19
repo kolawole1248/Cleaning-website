@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "About us",
   description:
     "ZA Cleaning Co Ltd is a London cleaning company offering domestic and office cleaning with clear quotes before any work starts.",
+  alternates: { canonical: "/about" },
 };
 
 export default async function AboutPage() {

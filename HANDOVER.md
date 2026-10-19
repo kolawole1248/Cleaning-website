@@ -162,11 +162,11 @@ enquiry or quote email goes out.)
 
 - [ ] Change the admin password (Settings page)
 - [ ] Change `SESSION_SECRET` in `.env` to a long random string
-- [ ] Set `SITE_URL` in `.env` to your real domain
+- [x] Site URL is hardcoded to `https://zacleaning.com` in `lib/site.ts` (sitemap, robots, canonicals and email links always use it — no `SITE_URL` env var needed)
 - [ ] Add your real bank details in Settings (quotes include them)
 - [x] SMTP email configured + tested (section 6)
 - [ ] When you get a Stripe account: switch on card payments (section 4b)
-- [ ] Deploy (Vercel is the standard choice for Next.js) and point your domain at it — see section 10
+- [x] Deployed to Vercel with the domain zacleaning.com — see section 10
 
 ## 10. Deploying to Vercel — what to enter
 
@@ -176,7 +176,6 @@ computer. Add:
 
 | Name | Value |
 |---|---|
-| `SITE_URL` | your real domain, e.g. `https://zacleans.co.uk` |
 | `SESSION_SECRET` | a new long random string (not the dev one) |
 | `TURSO_DATABASE_URL` | from `turso db show za-cleaning` (looks like `libsql://…`) |
 | `TURSO_AUTH_TOKEN` | from `turso db tokens create za-cleaning` |
@@ -190,6 +189,10 @@ computer. Add:
 | `SMTP_FROM` | `ZA Cleaning Co Ltd <zacleans26@gmail.com>` |
 | `BUSINESS_EMAIL` | `zacleans26@gmail.com` |
 | `STRIPE_SECRET_KEY` | only when you switch Stripe on later |
+
+**You do NOT need a `SITE_URL` variable** — the domain (`https://zacleaning.com`)
+is hardcoded in `lib/site.ts`, so sitemap/robots/canonical tags and the links
+inside emails are always correct even if the Vercel environment changes.
 
 Redeploy after changing environment variables.
 

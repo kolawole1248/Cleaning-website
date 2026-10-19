@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Privacy notice",
   description:
     "How ZA Cleaning Co Ltd collects, uses and protects your personal information when you enquire about cleaning services.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default async function PrivacyPage() {

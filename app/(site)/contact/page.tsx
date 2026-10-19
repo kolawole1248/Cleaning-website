@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Contact us",
   description:
     "Contact ZA Cleaning Co Ltd by phone, WhatsApp or email. We aim to respond within one working day, covering homes and offices across London.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {
