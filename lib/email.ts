@@ -1,5 +1,11 @@
 import nodemailer from "nodemailer";
 
+export type EnquiryAttachment = {
+  filename: string;
+  contentType: string;
+  content: Buffer;
+};
+
 type EnquiryMail = {
   id: string;
   name: string;
@@ -21,7 +27,10 @@ type EnquiryMail = {
  * Requires SMTP settings in .env — if they are missing the enquiry is
  * still saved in the admin panel inbox, so nothing is ever lost.
  */
-export async function sendEnquiryEmail(enquiry: EnquiryMail) {
+export async function sendEnquiryEmail(
+  enquiry: EnquiryMail,
+  attachments: EnquiryAttachment[] = []
+) {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, BUSINESS_EMAIL } =
     process.env;
 
@@ -51,6 +60,7 @@ export async function sendEnquiryEmail(enquiry: EnquiryMail) {
       `Frequency: ${enquiry.frequency}`,
       `Preferred date: ${enquiry.preferredDate || "not specified"}`,
       `Extra tasks: ${enquiry.extras || "none"}`,
+      `Photos: ${attachments.length ? `${attachments.length} attached` : "none"}`,
       ``,
       `Description:`,
       enquiry.description,
@@ -65,6 +75,7 @@ export async function sendEnquiryEmail(enquiry: EnquiryMail) {
       to: BUSINESS_EMAIL || "zacleans26@gmail.com",
       subject: `New website enquiry — ${enquiry.name} (${enquiry.service})`,
       text: lines,
+      ...(attachments.length ? { attachments } : {}),
     });
 
     console.log(`[email] enquiry notification sent to ${BUSINESS_EMAIL || SMTP_USER}`);

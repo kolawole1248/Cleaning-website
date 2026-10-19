@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { sendEnquiryEmail } from "@/lib/email";
+import type { EnquiryAttachment } from "@/lib/email";
 import { storePhoto } from "@/lib/photos";
 
 export type EnquiryFormState = {
@@ -17,6 +18,9 @@ const ALLOWED_TYPES: Record<string, string> = {
 };
 const MAX_FILES = 4;
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB per photo
+// Total email-attachment budget — Gmail caps a message at 25MB and base64
+// encoding adds ~33%, so 15MB of raw photos stays safely under the limit.
+const MAX_ATTACHED_BYTES = 15 * 1024 * 1024;
 
 function str(formData: FormData, key: string, max = 500): string {
   const value = formData.get(key);
@@ -62,6 +66,8 @@ export async function submitEnquiry(
 
   // Save uploaded photos securely (type + size checked, random names)
   const photoPaths: string[] = [];
+  const attachments: EnquiryAttachment[] = [];
+  let attachedBytes = 0;
   const files = formData.getAll("photos");
   for (const file of files) {
     if (!(file instanceof File) || file.size === 0) continue;
@@ -93,6 +99,19 @@ export async function submitEnquiry(
       // without that photo and the failure is logged.
       console.error("[enquiry] photo save failed:", error);
     }
+
+    // Also attach the original photo to the notification email, so the
+    // owner sees it directly in their inbox even without cloud storage.
+    if (attachedBytes + file.size <= MAX_ATTACHED_BYTES) {
+      attachments.push({
+        filename: `photo-${attachments.length + 1}.${ext}`,
+        contentType: file.type,
+        content: Buffer.from(await file.arrayBuffer()),
+      });
+      attachedBytes += file.size;
+    } else {
+      console.log("[enquiry] extra photo skipped from email — attachment size cap reached");
+    }
   }
 
   try {
@@ -115,21 +134,24 @@ export async function submitEnquiry(
     });
 
     // Email the business — non-fatal if SMTP is not configured yet
-    await sendEnquiryEmail({
-      id: enquiry.id,
-      name,
-      phone,
-      email,
-      postcode,
-      service,
-      propertyType,
-      bedrooms,
-      bathrooms,
-      frequency,
-      preferredDate,
-      extras,
-      description,
-    });
+    await sendEnquiryEmail(
+      {
+        id: enquiry.id,
+        name,
+        phone,
+        email,
+        postcode,
+        service,
+        propertyType,
+        bedrooms,
+        bathrooms,
+        frequency,
+        preferredDate,
+        extras,
+        description,
+      },
+      attachments
+    );
 
     return { ok: true, id: enquiry.id };
   } catch (error) {
