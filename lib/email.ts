@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { SITE_URL } from "@/lib/site";
 
 export type EnquiryAttachment = {
   filename: string;
@@ -65,9 +66,7 @@ export async function sendEnquiryEmail(
       `Description:`,
       enquiry.description,
       ``,
-      `View in admin panel: ${
-        (process.env.SITE_URL || "http://localhost:3000").replace(/\/$/, "")
-      }/admin/enquiries?id=${enquiry.id}`,
+      `View in admin panel: ${SITE_URL}/admin/enquiries?id=${enquiry.id}`,
     ].join("\n");
 
     await transporter.sendMail({
@@ -211,7 +210,7 @@ export async function sendPaymentReceivedEmail(opts: {
         `Quote: ${opts.ref}`,
         `Amount: ${opts.price}`,
         ``,
-        `View in admin panel: /admin/enquiries?id=${opts.enquiryId}`,
+        `View in admin panel: ${SITE_URL}/admin/enquiries?id=${opts.enquiryId}`,
       ].join("\n"),
     });
     return { sent: true as const };

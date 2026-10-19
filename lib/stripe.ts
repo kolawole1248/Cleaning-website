@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 /**
  * Minimal Stripe REST helper — no SDK dependency.
  * Set STRIPE_SECRET_KEY in .env to enable card payments on quotes.
@@ -12,7 +14,7 @@ function stripeKey() {
 }
 
 function siteUrl() {
-  return (process.env.SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+  return SITE_URL;
 }
 
 /** Stripe takes a whole number of pence, e.g. 18000 for £180.00 */
