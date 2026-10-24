@@ -86,18 +86,20 @@ On the enquiry page, use the **Send a quote** box:
      is switched on — see below; until then quotes are bank-transfer only)
 4. The enquiry status changes to **Quoted** automatically.
 
-**Stripe card payments are currently switched off** (no API key yet) — but
-everything is built and ready: the code stays in `lib/stripe.ts`, the
-**Stripe payment link** field stays in Settings, and quotes go out normally
-with bank transfer details only. To switch card payments on later:
+**Stripe card payments are switched ON.** The live secret key lives only in
+Vercel as `STRIPE_SECRET_KEY` (never in `.env`, never in Git). Because the key
+is set, every quote email includes a **Pay by debit card** button for the
+**exact price you typed** — powered by Stripe Checkout, with cards, Apple Pay
+and Google Pay. When the customer pays, the site marks the enquiry **Booked**
+and emails you a `💳 Payment received` alert.
 
-1. Create a Stripe account and copy your secret key from
-   https://dashboard.stripe.com/apikeys
-2. Add `STRIPE_SECRET_KEY="sk_live_..."` to `.env` (or just paste a payment
-   link into `Admin → Settings → Stripe payment link`), then restart the server.
-3. Quotes then include a **Pay by debit card** button for the exact amount;
-   when a customer pays, the site marks the enquiry **Booked** and emails you
-   a `💳 Payment received` alert.
+- Rotate or replace the key: Vercel → **Settings → Environment Variables** →
+  `STRIPE_SECRET_KEY` → update → **Redeploy** (env changes only apply to a new
+  deployment). Get keys at https://dashboard.stripe.com/apikeys
+- Test payments any time with Stripe's **test** key (`sk_test_…`) and card
+  `4242 4242 4242 4242` — swap the value back to `sk_live_…` afterwards.
+- The **Stripe payment link** field in Settings is the old fixed-price fallback;
+  leave it blank now that the key is set (the key always wins).
 
 ## 5. Change contact details / payment details
 
@@ -165,7 +167,9 @@ enquiry or quote email goes out.)
 - [x] Site URL is hardcoded to `https://zacleaning.com` in `lib/site.ts` (sitemap, robots, canonicals and email links always use it — no `SITE_URL` env var needed)
 - [ ] Add your real bank details in Settings (quotes include them)
 - [x] SMTP email configured + tested (section 6)
-- [ ] When you get a Stripe account: switch on card payments (section 4b)
+- [x] Stripe card payments switched on — live `STRIPE_SECRET_KEY` in Vercel (section 4b)
+- [ ] **Fix the Cloudinary credentials** (section 10) — until then customer
+      photos reach your enquiry email as attachments but not the admin panel
 - [x] Deployed to Vercel with the domain zacleaning.com — see section 10
 
 ## 10. Deploying to Vercel — what to enter
@@ -195,6 +199,19 @@ is hardcoded in `lib/site.ts`, so sitemap/robots/canonical tags and the links
 inside emails are always correct even if the Vercel environment changes.
 
 Redeploy after changing environment variables.
+
+> ⚠️ **Customer photos: the Cloudinary credentials currently in `.env` are
+> invalid** (`za-cleaning` cloud does not exist — the API answers *Invalid
+> credentials*). While that's true, uploaded photos **cannot be stored**, so
+> they do **not** appear in the admin panel — but they are **still attached to
+> the enquiry notification email** (the email says `Photos: N attached`), so
+> nothing is lost.
+>
+> To fix: create a free account at cloudinary.com → Dashboard → **Product
+> Environment Credentials** → copy **Cloud name**, **API key** and **API
+> secret** → replace the three `CLOUDINARY_*` values in `.env` **and** in
+> Vercel → Redeploy. Then send a test enquiry with a photo and it will show
+> under **Photos** in the admin panel.
 
 **How the database works:** locally the site uses the SQLite file
 (`prisma/dev.db`) — no setup needed. On Vercel, setting the two `TURSO_*`
